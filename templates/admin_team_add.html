@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="admin-section">
+    <h2>Add Team Member</h2>
+    
+    <form method="POST" enctype="multipart/form-data" class="contact-form">
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+        
+        <label>
+            Name *
+            <input type="text" name="name" required placeholder="Full name">
+        </label>
+        
+        <label>
+            Role *
+            <input type="text" name="role" required placeholder="e.g., Director, Cinematographer, Producer">
+        </label>
+        
+        <label>
+            Bio
+            <textarea name="bio" placeholder="Brief biography or description" rows="4"></textarea>
+        </label>
+        
+        <label>
+            Background Image
+            <input type="file" name="image" accept="image/*" placeholder="Upload an image">
+        </label>
+        
+        <label>
+            Display Order
+            <input type="number" name="display_order" value="0" placeholder="Order in gallery (0 = default)">
+        </label>
+        
+        <div class="form-actions">
+            <button type="submit" class="button">Add Team Member</button>
+            <a href="{{ url_for('admin_team') }}" class="button button-secondary">Cancel</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

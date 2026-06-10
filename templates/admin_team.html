@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="admin-section">
+    <h2>Team Management</h2>
+    <p>Manage cast and crew members for the gallery.</p>
+    
+    <div class="admin-toolbar">
+        <a href="{{ url_for('admin_team_add') }}" class="button">+ Add Team Member</a>
+    </div>
+    
+    {% if team_members %}
+    <div class="team-list">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Image</th>
+                    <th>Order</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in team_members %}
+                <tr>
+                    <td>{{ member.name }}</td>
+                    <td>{{ member.role }}</td>
+                    <td>
+                        {% if member.image_filename %}
+                            <span class="status-tag success">✓ Uploaded</span>
+                        {% else %}
+                            <span class="status-tag muted">No image</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ member.display_order }}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{{ url_for('admin_team_edit', team_id=member.id) }}" class="button-small">Edit</a>
+                            <form method="POST" action="{{ url_for('admin_team_delete', team_id=member.id) }}" style="display:inline;">
+                                <button type="submit" class="button-small button-danger" onclick="return confirm('Delete this team member?')">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No team members yet. <a href="{{ url_for('admin_team_add') }}">Add one now</a>.</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

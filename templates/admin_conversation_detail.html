@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block content %}
+<section>
+    <p class="section-title">Conversation Detail</p>
+    <h1>Conversation with {{ conversation.customer_name or 'Customer' }}</h1>
+    <p class="conversation-meta">Email: {{ conversation.customer_email }} • Subject: {{ conversation.subject }}</p>
+
+    <div class="conversation-summary">
+        <div class="conversation-box">
+            <h2>Initial Message</h2>
+            <p>{{ conversation.initial_message }}</p>
+            <p><strong>Status:</strong> {{ conversation.status|capitalize }}</p>
+            <p><strong>Priority:</strong> {{ conversation.priority|capitalize }}</p>
+        </div>
+    </div>
+
+    {% if replies %}
+        <div class="chat-conversation">
+            {% for reply in replies %}
+                <div class="conversation-message {% if reply.is_admin %}admin{% else %}customer{% endif %}">
+                    <div class="message-sender">{{ 'Admin' if reply.is_admin else reply.sender_name }}</div>
+                    <div class="message-text">{{ reply.message }}</div>
+                    <div class="message-time">{{ reply.created_at }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="contact-box">
+            <p>No replies yet. Send the first response below.</p>
+        </div>
+    {% endif %}
+
+    <form method="post" action="/admin/conversations/{{ conversation.id }}/reply" class="reply-form">
+        <label for="message">Reply message</label>
+        <textarea name="message" id="message" rows="5" required></textarea>
+        <button type="submit" class="button button-secondary">Send Reply</button>
+    </form>
+</section>
+
+<style>
+    .conversation-meta {
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .conversation-summary {
+        margin-bottom: 30px;
+    }
+
+    .conversation-box {
+        padding: 18px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .conversation-box h2 {
+        margin-top: 0;
+    }
+
+    .chat-conversation {
+        margin-bottom: 30px;
+    }
+
+    .conversation-message {
+        margin-bottom: 16px;
+        padding: 14px;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .conversation-message.customer {
+        background: #f3f6ff;
+        border-left: 4px solid #667eea;
+    }
+
+    .conversation-message.admin {
+        background: #fdf7e2;
+        border-left: 4px solid #f6c23e;
+    }
+
+    .message-sender {
+        font-size: 12px;
+        color: #555;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .message-text {
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .message-time {
+        font-size: 11px;
+        color: #999;
+        margin-top: 8px;
+    }
+
+    .reply-form {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .reply-form label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .reply-form textarea {
+        width: 100%;
+        border: 1px solid #d7d7d7;
+        border-radius: 8px;
+        padding: 12px;
+        font-family: inherit;
+        margin-bottom: 14px;
+        resize: vertical;
+    }
+
+    .reply-form button {
+        display: inline-flex;
+        align-items: center;
+    }
+</style>
+{% endblock %}

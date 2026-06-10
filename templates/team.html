@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="team-section">
+    <p class="section-title">Our Team</p>
+    <h1>Meet the Cast & Crew</h1>
+    <p class="section-description">Our talented team of creative professionals brings expertise and vision to every project.</p>
+    
+    <div class="team-grid">
+        {% if team_members %}
+            {% for member in team_members %}
+            <div class="team-card" style="{% if member.image_filename %}background-image: url('/uploads/{{ member.image_filename }}');{% endif %}">
+                <div class="team-card-overlay">
+                    <div class="team-card-content">
+                        <h3>{{ member.name }}</h3>
+                        <p class="team-role">{{ member.role }}</p>
+                        {% if member.bio %}
+                        <p class="team-bio">{{ member.bio }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="empty-state">
+            <p>No team members added yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

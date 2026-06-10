@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+<section>
+    <p class="section-title">Dashboard</p>
+    <h1>Studio Admin Panel</h1>
+    <p>Welcome to the admin area. This page is protected by password authentication.</p>
+    <div class="service-list admin-cards">
+        <article>
+            <div class="card-head">
+                <span class="card-icon">🔒</span>
+                <h2>Set Password for New Admins</h2>
+            </div>
+            <p>Create a secure account for a new administrator with a unique login.</p>
+            <a class="button button-secondary" href="/admin/add">Add Admin</a>
+        </article>
+        <article>
+            <div class="card-head">
+                <span class="card-icon">🔑</span>
+                <h2>Change Password</h2>
+            </div>
+            <p>Reset your admin password quickly if there are too many failed sign-in attempts.</p>
+            <a class="button button-secondary" href="/admin/change-password">Change Password</a>
+        </article>
+        <article>
+            <div class="card-head">                <span class="card-icon">🎬</span>
+                <h2>Team Management</h2>
+            </div>
+            <p>Add and manage cast and crew members for the gallery.</p>
+            <a class="button button-secondary" href="/admin/team">Manage Team</a>
+        </article>
+    </div>
+
+    <!-- Contact Inquiries Section -->
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--border-color);">
+        <h2>Contact Messages</h2>
+        <p>All inquiries submitted from the contact page are stored here for review.</p>
+        <form method="get" class="search-form" style="margin-bottom: 1.5rem;">
+            <input type="search" name="q" placeholder="Search name, email or message" value="{{ q or '' }}">
+            <button class="button button-secondary" type="submit">Search</button>
+        </form>
+
+        <div class="inquiry-list">
+            {% if inquiries %}
+                {% for inquiry in inquiries %}
+                    <article class="inquiry-card">
+                        <div class="card-head">
+                            <h3>{{ inquiry.name }}</h3>
+                            <span class="inquiry-date">{{ inquiry.created_at }}</span>
+                        </div>
+                        <p class="inquiry-meta">{{ inquiry.email }}{% if inquiry.attachment %} — <a href="/uploads/{{ inquiry.attachment }}">Download attachment</a>{% endif %}</p>
+                        <p>{{ inquiry.message }}</p>
+                        <form method="post" action="/admin/inquiries/delete/{{ inquiry.id }}" onsubmit="return confirm('Delete this inquiry?');">
+                            <button type="submit" class="button button-secondary">Delete</button>
+                        </form>
+                    </article>
+                {% endfor %}
+            {% else %}
+                <div class="contact-box">
+                    <p>No inquiries have been submitted yet.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if pages and pages > 1 %}
+            <div class="pagination" style="margin-top: 1rem;">
+                {% if page > 1 %}
+                    <a class="button button-secondary" href="?q={{ q or '' }}&page={{ page - 1 }}">Prev</a>
+                {% endif %}
+                <span>Page {{ page }} / {{ pages }}</span>
+                {% if page < pages %}
+                    <a class="button button-secondary" href="?q={{ q or '' }}&page={{ page + 1 }}">Next</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

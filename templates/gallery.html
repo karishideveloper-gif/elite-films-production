@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="gallery-section">
+    <p class="section-title">Gallery</p>
+    <h1>Cast & Crew Gallery</h1>
+    <p class="section-description">Explore the talented professionals who bring our productions to life.</p>
+    
+    <div class="gallery-grid">
+        {% if team_members %}
+            {% for member in team_members %}
+            <div class="gallery-card">
+                <div class="gallery-image-container" {% if member.image_filename %}style="background-image: url('/team-images/{{ member.image_filename }}')"{% endif %}>
+                    {% if not member.image_filename %}
+                    <div class="gallery-placeholder">
+                        <span>No Image</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="gallery-content">
+                    <h3>{{ member.name }}</h3>
+                    <p class="gallery-role">{{ member.role }}</p>
+                    {% if member.bio %}
+                    <p class="gallery-bio">{{ member.bio }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="empty-state">
+            <p>No team members in the gallery yet. Check back soon!</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

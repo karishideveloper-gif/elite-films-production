@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0f19">
+    <meta name="description" content="Professional film production website offering commercial, music video, documentary, and post-production services.">
+    <meta name="keywords" content="film production, video production, commercial production, music video, documentary, post-production, studio services">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Film Production Website">
+    <meta property="og:description" content="Professional film production services for commercials, music videos, documentaries, and branded content.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://127.0.0.1:5000/">
+    <meta property="og:image" content="/static/img/hero-pattern.svg">
+    <title>Film Production Website</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <div class="brand">Black Film Productions</div>
+            <nav class="main-nav">
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/gallery">Gallery</a>
+                <a href="/services">Services</a>
+                <a href="/contact">Contact</a>
+                {% if logged_in %}
+                    <a href="/admin">Admin</a>
+                    <a href="/logout">Logout</a>
+                {% else %}
+                    <a href="/login">Admin Login</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-grid">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>© 2026 Black Film Productions Studio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Chat removed -->
+</body>
+</html>

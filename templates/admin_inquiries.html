@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<section>
+    <p class="section-title">Inquiries</p>
+    <h1>Contact Messages</h1>
+    <p>All inquiries submitted from the contact page are stored here for review.</p>
+    <form method="get" class="search-form">
+        <input type="search" name="q" placeholder="Search name, email or message" value="{{ q or '' }}">
+        <button class="button button-secondary" type="submit">Search</button>
+    </form>
+
+    <div class="inquiry-list">
+        {% if inquiries %}
+            {% for inquiry in inquiries %}
+                <article class="inquiry-card">
+                    <div class="card-head">
+                        <h2>{{ inquiry.name }}</h2>
+                        <span class="inquiry-date">{{ inquiry.created_at }}</span>
+                    </div>
+                    <p class="inquiry-meta">{{ inquiry.email }}{% if inquiry.attachment %} — <a href="/uploads/{{ inquiry.attachment }}">Download attachment</a>{% endif %}</p>
+                    <p>{{ inquiry.message }}</p>
+                    <form method="post" action="/admin/inquiries/delete/{{ inquiry.id }}" onsubmit="return confirm('Delete this inquiry?');">
+                        <button type="submit" class="button button-secondary">Delete</button>
+                    </form>
+                </article>
+            {% endfor %}
+        {% else %}
+            <div class="contact-box">
+                <p>No inquiries have been submitted yet.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Chat conversations removed -->
+
+    {% if pages and pages > 1 %}
+        <div class="pagination">
+            {% if page > 1 %}
+                <a class="button button-secondary" href="?q={{ q or '' }}&page={{ page - 1 }}">Prev</a>
+            {% endif %}
+            <span>Page {{ page }} / {{ pages }}</span>
+            {% if page < pages %}
+                <a class="button button-secondary" href="?q={{ q or '' }}&page={{ page + 1 }}">Next</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="auth-section">
+    <p class="section-title">Admin Access</p>
+    <div class="auth-panel">
+        <h1>Sign in to the Studio Dashboard</h1>
+        <p>Enter your administrator credentials to manage the site.</p>
+        {% if error %}
+            <div class="flash-message flash-error">{{ error }}</div>
+        {% endif %}
+        <form method="post" class="auth-form">
+            <label>
+                Username
+                <input type="text" name="username" required placeholder="admin">
+            </label>
+            <label>
+                Password
+                <input type="password" name="password" required placeholder="••••••••">
+            </label>
+            <button type="submit" class="button">Login</button>
+        </form>
+        <a class="forgot-link" href="/reset-password">
+            <span class="forgot-icon">🔑</span>
+            Forgot password?
+        </a>
+    </div>
+</section>
+{% endblock %}

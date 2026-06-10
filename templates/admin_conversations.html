@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<section>
+    <p class="section-title">Customer Conversations</p>
+    <h1>Conversations</h1>
+    <p>All customer conversations created from the contact form are listed here.</p>
+
+    <form method="get" class="search-form">
+        <input type="search" name="q" placeholder="Search name, email, subject, or message" value="{{ search or '' }}">
+        <select name="status">
+            <option value="">All statuses</option>
+            <option value="open" {% if status == 'open' %}selected{% endif %}>Open</option>
+            <option value="in_progress" {% if status == 'in_progress' %}selected{% endif %}>In Progress</option>
+            <option value="resolved" {% if status == 'resolved' %}selected{% endif %}>Resolved</option>
+            <option value="closed" {% if status == 'closed' %}selected{% endif %}>Closed</option>
+        </select>
+        <button class="button button-secondary" type="submit">Filter</button>
+    </form>
+
+    {% if conversations %}
+        <div class="conversation-list">
+            {% for convo in conversations %}
+                <article class="inquiry-card">
+                    <div class="card-head">
+                        <h2>{{ convo.customer_name or 'Anonymous' }}</h2>
+                        <span class="inquiry-date">{{ convo.created_at }}</span>
+                    </div>
+                    <p class="inquiry-meta">{{ convo.customer_email }} • {{ convo.subject }}</p>
+                    <p>{{ convo.initial_message }}</p>
+                    <div class="conversation-actions">
+                        <span class="status-pill status-{{ convo.status|replace('_', '-') }}">{{ convo.status|capitalize }}</span>
+                        <a class="button button-secondary" href="/admin/conversations/{{ convo.id }}">View & Reply</a>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+
+        {% if pages and pages > 1 %}
+            <div class="pagination">
+                {% if page > 1 %}
+                    <a class="button button-secondary" href="?q={{ search or '' }}&status={{ status or '' }}&page={{ page - 1 }}">Prev</a>
+                {% endif %}
+                <span>Page {{ page }} / {{ pages }}</span>
+                {% if page < pages %}
+                    <a class="button button-secondary" href="?q={{ search or '' }}&status={{ status or '' }}&page={{ page + 1 }}">Next</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="contact-box">
+            <p>No conversations found.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
